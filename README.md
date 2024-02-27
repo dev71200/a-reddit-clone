@@ -122,40 +122,40 @@ $ kubectl get svc -n prometheus
 			
 **5. ArgoCD Installation on Kubernetes Cluster and Add EKS Cluster to ArgoCD**
 * First, create a namespace
-	>$ kubectl create namespace argocd
+	> $ kubectl create namespace argocd
 
 * Next, let's apply the yaml configuration files for ArgoCd
-	>$ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	> $ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 * Now we can view the pods created in the ArgoCD namespace.
-	>$ kubectl get pods -n argocd
+	> $ kubectl get pods -n argocd
 
 * To interact with the API Server we need to deploy the CLI:
-	>$ sudo curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.4.7/argocd-linux-amd64
+	> $ sudo curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.4.7/argocd-linux-amd64
 
-	>$ sudo chmod +x /usr/local/bin/argocd
+	> $ sudo chmod +x /usr/local/bin/argocd
       
 * Expose argocd-server
-	>$ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+	> $ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 * Wait about 2 minutes for the LoadBalancer creation
-	>$ kubectl get svc -n argocd
+	> $ kubectl get svc -n argocd
 
 * Get pasword and decode it and login to ArgoCD on Browser. Go to user info and change the password
-	>$ kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
+	> $ kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
 
-	>$ echo WXVpLUg2LWxoWjRkSHFmSA== | base64 --decode
+	> $ echo WXVpLUg2LWxoWjRkSHFmSA== | base64 --decode
 
 * login to ArgoCD from CLI
-	>$ argocd login a2255bb2bb33f438d9addf8840d294c5-785887595.ap-south-1.elb.ama zonaws.com --username admin,    provide the password which you set above
+	> $ argocd login a2255bb2bb33f438d9addf8840d294c5-785887595.ap-south-1.elb.ama zonaws.com --username admin,    provide the password which you set above
 
 * Check available clusters in ArgoCD
-	>$ argocd cluster list
+	> $ argocd cluster list
 
 * Below command will show the EKS cluster details
-	>$ kubectl config get-contexts
+	> $ kubectl config get-contexts
 
 * Add above EKS cluster to ArgoCD with below command
-	>$ argocd cluster add i-08b9d0ff0409f48e7@virtualtechbox-cluster.ap-south-1.eksctl.io --name virtualtechbox-eks-cluster
+	> $ argocd cluster add i-08b9d0ff0409f48e7@virtualtechbox-cluster.ap-south-1.eksctl.io --name virtualtechbox-eks-cluster
      
 * Now if you give command "$ argocd cluster list" you will get both the clusters EKS & AgoCD(in-cluster). This can be verified at ArgoCD Dashboard.	
